@@ -11,8 +11,10 @@ import UIKit
 class PlayerViewController: UIViewController, MediaPlayerProtocol {
     
     @IBOutlet var mediaPlayer: MediaPlayer!
-    
-    
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var progressView: UIProgressView!
+    @IBOutlet weak var artistView: UILabel!
+    @IBOutlet weak var titleView: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,11 +24,15 @@ class PlayerViewController: UIViewController, MediaPlayerProtocol {
     }
     
     func displaySong(_ song: Song) {
+        imageView.image = song.image
+        artistView.text = song.artist
+        titleView.text = song.title
     
     }
     
     func displayCompletionPercentage(_ percentComplete: Float) {
-
+        progressView.progress = percentComplete
     }
+    
 }
 

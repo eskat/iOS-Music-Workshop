@@ -19,7 +19,9 @@ class MediaPlayer: NSObject {
     var avPlayer = AVPlayer()
     var songIndex = 0
     var songs = [Song]()
-    
+    var initMusic = 0
+    var pauseToggle = 0
+
     @IBOutlet weak var delegate:AnyObject?
     
     func setup() {
@@ -32,13 +34,12 @@ class MediaPlayer: NSObject {
 
     }
     
-    @IBAction func playMusic() {
+    @IBAction func selectMusic() {
         
         let song = songs[songIndex]
         
         avPlayer = AVPlayer(url: song.musicFilePath as URL)
         avPlayer.play()
-        
         delegate?.displaySong(song)
         
         let interval = CMTime(seconds: 1, preferredTimescale: 1)
@@ -53,7 +54,23 @@ class MediaPlayer: NSObject {
 
             }
         }
+        
     }
+    
+    @IBAction func playMusic() {
+        if initMusic == 0 {
+            selectMusic()
+            initMusic = 1
+            pauseToggle = 1
+        } else if pauseToggle == 1 {
+            avPlayer.pause()
+            pauseToggle = 0
+        } else {
+            avPlayer.play()
+            pauseToggle = 1
+        }
+    }
+    
     
     @IBAction func playNextSong(){
         songIndex = songIndex + 1
@@ -62,7 +79,7 @@ class MediaPlayer: NSObject {
             songIndex = 0
         }
         
-        playMusic()
+        selectMusic()
     }
     
     @IBAction func playPreviousSong(){
@@ -72,7 +89,7 @@ class MediaPlayer: NSObject {
             songIndex = songs.count - 1
         }
         
-        playMusic()
+        selectMusic()
     }
     
     
